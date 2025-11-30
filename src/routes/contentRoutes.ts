@@ -29,8 +29,8 @@ router.get('/', (req: Request, res: Response) => {
     }
 
     if (difficulty) {
-      const diffLevel = parseInt(difficulty as string);
-      if (!isNaN(diffLevel) && diffLevel >= 1 && diffLevel <= 5) {
+      const diffLevel = Number(difficulty);
+      if (!isNaN(diffLevel) && Number.isInteger(diffLevel) && diffLevel >= 1 && diffLevel <= 5) {
         content = content.filter(c => c.difficulty === diffLevel);
       }
     }

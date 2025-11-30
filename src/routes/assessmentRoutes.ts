@@ -48,18 +48,36 @@ router.post('/start', (req: Request, res: Response) => {
     });
 
     // Return questions without correct answers
-    const safeQuestions = questions.map(q => ({
-      id: q.id,
-      category: q.category,
-      questionType: q.questionType,
-      difficulty: q.difficulty,
-      prompt: q.prompt,
-      audioUrl: q.audioUrl,
-      options: q.options,
-      points: q.points,
-      timeLimit: q.timeLimit,
-      metadata: q.metadata ? { ...q.metadata, targetFreq: undefined, targetGain: undefined, targetQ: undefined, targetLevels: undefined } : undefined
-    }));
+    // Use whitelist approach for metadata to avoid exposing sensitive answer data
+    const ALLOWED_METADATA_KEYS = ['tolerance', 'tracks', 'instrumentTypes', 'gameType', 'rounds', 'timePerRound', 'difficultyProgression', 'scoring', 'options'];
+    
+    const safeQuestions = questions.map(q => {
+      let safeMetadata: Record<string, unknown> | undefined;
+      if (q.metadata) {
+        safeMetadata = {};
+        for (const key of ALLOWED_METADATA_KEYS) {
+          if (key in q.metadata) {
+            safeMetadata[key] = q.metadata[key];
+          }
+        }
+        if (Object.keys(safeMetadata).length === 0) {
+          safeMetadata = undefined;
+        }
+      }
+      
+      return {
+        id: q.id,
+        category: q.category,
+        questionType: q.questionType,
+        difficulty: q.difficulty,
+        prompt: q.prompt,
+        audioUrl: q.audioUrl,
+        options: q.options,
+        points: q.points,
+        timeLimit: q.timeLimit,
+        metadata: safeMetadata
+      };
+    });
 
     res.json({
       assessmentId,
