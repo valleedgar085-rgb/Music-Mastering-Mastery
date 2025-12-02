@@ -1,0 +1,24 @@
+    // Baby-blue theme tokens and simple styles
+    export const Colors = {
+      error: '#D32F2F',
+            white: '#FFFFFF',
+      textDark: '#212121', // Added for accessibility on white backgrounds
+      navy: '#0B3D91',
+      babyBlueAccent: '#7ECBF0',
+      babyBlueLight: '#E6F9FF',
+      babyBlue: '#89CFF0',
+
+    // All spacing values are in pixels    };
+
+    export const spacing = {
+      lg: 24,
+      md: 16,
+      sm: 10,
+      xs: 6,
+    };
+
+    export default {
+      Colors,
+      spacing,
+    };
+
