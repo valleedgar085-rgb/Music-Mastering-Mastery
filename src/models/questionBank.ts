@@ -16,7 +16,11 @@ function buildQuestionIndex(): void {
   }
   
   for (const question of assessmentQuestionBank) {
-    questionsByCategoryIndex.get(question.category)!.push(question);
+    // Use safe access pattern with fallback to ensure robustness
+    const categoryArr = questionsByCategoryIndex.get(question.category);
+    if (categoryArr) {
+      categoryArr.push(question);
+    }
   }
 }
 

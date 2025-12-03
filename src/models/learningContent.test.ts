@@ -100,6 +100,13 @@ describe('learningContent', () => {
       expect(quizzes.length).toBeGreaterThan(0);
       expect(quizzes.every(c => c.contentType === ContentType.QUIZ)).toBe(true);
     });
+
+    it('should return consistent results across multiple calls (index is built once)', () => {
+      const lessons1 = getContentByType(ContentType.LESSON);
+      const lessons2 = getContentByType(ContentType.LESSON);
+      
+      expect(lessons1).toBe(lessons2); // Same array reference from index
+    });
   });
 
   describe('getContentByDifficulty', () => {
@@ -108,6 +115,13 @@ describe('learningContent', () => {
       
       expect(beginnerContent.length).toBeGreaterThan(0);
       expect(beginnerContent.every(c => c.difficulty === DifficultyLevel.BEGINNER)).toBe(true);
+    });
+
+    it('should return consistent results across multiple calls (index is built once)', () => {
+      const beginner1 = getContentByDifficulty(DifficultyLevel.BEGINNER);
+      const beginner2 = getContentByDifficulty(DifficultyLevel.BEGINNER);
+      
+      expect(beginner1).toBe(beginner2); // Same array reference from index
     });
   });
 

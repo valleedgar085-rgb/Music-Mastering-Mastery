@@ -5,6 +5,8 @@ import { LearningContent, SkillCategory, ContentType, DifficultyLevel } from '..
  */
 let contentByIdIndex: Map<string, LearningContent> | null = null;
 let contentByCategoryIndex: Map<SkillCategory, LearningContent[]> | null = null;
+let contentByTypeIndex: Map<ContentType, LearningContent[]> | null = null;
+let contentByDifficultyIndex: Map<DifficultyLevel, LearningContent[]> | null = null;
 
 /**
  * Builds index maps from the content library for efficient lookups
@@ -12,14 +14,43 @@ let contentByCategoryIndex: Map<SkillCategory, LearningContent[]> | null = null;
 function buildIndexes(): void {
   contentByIdIndex = new Map();
   contentByCategoryIndex = new Map();
+  contentByTypeIndex = new Map();
+  contentByDifficultyIndex = new Map();
   
   for (const category of Object.values(SkillCategory)) {
     contentByCategoryIndex.set(category, []);
   }
   
+  for (const type of Object.values(ContentType)) {
+    contentByTypeIndex.set(type, []);
+  }
+  
+  // DifficultyLevel is a numeric enum, so Object.values returns both names and numeric values
+  // We only want the numeric values (1-5)
+  for (const level of Object.values(DifficultyLevel)) {
+    if (typeof level === 'number') {
+      contentByDifficultyIndex.set(level, []);
+    }
+  }
+  
   for (const content of learningContentLibrary) {
     contentByIdIndex.set(content.id, content);
-    contentByCategoryIndex.get(content.category)!.push(content);
+    
+    // Use safe access patterns with fallback to ensure robustness
+    const categoryArr = contentByCategoryIndex.get(content.category);
+    if (categoryArr) {
+      categoryArr.push(content);
+    }
+    
+    const typeArr = contentByTypeIndex.get(content.contentType);
+    if (typeArr) {
+      typeArr.push(content);
+    }
+    
+    const difficultyArr = contentByDifficultyIndex.get(content.difficulty);
+    if (difficultyArr) {
+      difficultyArr.push(content);
+    }
   }
 }
 
@@ -583,17 +614,19 @@ export function getContentByCategory(category: SkillCategory): LearningContent[]
 }
 
 /**
- * Get learning content by difficulty
+ * Get learning content by difficulty - O(1) lookup using index
  */
 export function getContentByDifficulty(difficulty: DifficultyLevel): LearningContent[] {
-  return learningContentLibrary.filter(c => c.difficulty === difficulty);
+  ensureIndexes();
+  return contentByDifficultyIndex!.get(difficulty) ?? [];
 }
 
 /**
- * Get learning content by type
+ * Get learning content by type - O(1) lookup using index
  */
 export function getContentByType(contentType: ContentType): LearningContent[] {
-  return learningContentLibrary.filter(c => c.contentType === contentType);
+  ensureIndexes();
+  return contentByTypeIndex!.get(contentType) ?? [];
 }
 
 /**
