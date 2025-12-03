@@ -1,6 +1,38 @@
 import { LearningContent, SkillCategory, ContentType, DifficultyLevel } from '../types';
 
 /**
+ * Index maps for O(1) content lookups - populated lazily on first access
+ */
+let contentByIdIndex: Map<string, LearningContent> | null = null;
+let contentByCategoryIndex: Map<SkillCategory, LearningContent[]> | null = null;
+
+/**
+ * Builds index maps from the content library for efficient lookups
+ */
+function buildIndexes(): void {
+  contentByIdIndex = new Map();
+  contentByCategoryIndex = new Map();
+  
+  for (const category of Object.values(SkillCategory)) {
+    contentByCategoryIndex.set(category, []);
+  }
+  
+  for (const content of learningContentLibrary) {
+    contentByIdIndex.set(content.id, content);
+    contentByCategoryIndex.get(content.category)!.push(content);
+  }
+}
+
+/**
+ * Ensures indexes are built (lazy initialization)
+ */
+function ensureIndexes(): void {
+  if (contentByIdIndex === null) {
+    buildIndexes();
+  }
+}
+
+/**
  * Learning content library with lessons, mini-games, and quizzes
  * organized by skill category and difficulty level
  */
@@ -543,10 +575,11 @@ export const learningContentLibrary: LearningContent[] = [
 ];
 
 /**
- * Get learning content by category
+ * Get learning content by category - O(1) lookup using index
  */
 export function getContentByCategory(category: SkillCategory): LearningContent[] {
-  return learningContentLibrary.filter(c => c.category === category);
+  ensureIndexes();
+  return contentByCategoryIndex!.get(category) ?? [];
 }
 
 /**
@@ -571,14 +604,14 @@ export function getContentForSkillLevel(
   category: SkillCategory,
   maxDifficulty: DifficultyLevel
 ): LearningContent[] {
-  return learningContentLibrary.filter(
-    c => c.category === category && c.difficulty <= maxDifficulty
-  );
+  const categoryContent = getContentByCategory(category);
+  return categoryContent.filter(c => c.difficulty <= maxDifficulty);
 }
 
 /**
- * Get content by ID
+ * Get content by ID - O(1) lookup using index
  */
 export function getContentById(id: string): LearningContent | undefined {
-  return learningContentLibrary.find(c => c.id === id);
+  ensureIndexes();
+  return contentByIdIndex!.get(id);
 }

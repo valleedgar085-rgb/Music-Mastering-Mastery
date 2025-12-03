@@ -1,6 +1,35 @@
 import { AssessmentQuestion, SkillCategory, QuestionType, DifficultyLevel } from '../types';
 
 /**
+ * Index map for O(1) category lookups - populated lazily
+ */
+let questionsByCategoryIndex: Map<SkillCategory, AssessmentQuestion[]> | null = null;
+
+/**
+ * Builds index map from the question bank for efficient lookups
+ */
+function buildQuestionIndex(): void {
+  questionsByCategoryIndex = new Map();
+  
+  for (const category of Object.values(SkillCategory)) {
+    questionsByCategoryIndex.set(category, []);
+  }
+  
+  for (const question of assessmentQuestionBank) {
+    questionsByCategoryIndex.get(question.category)!.push(question);
+  }
+}
+
+/**
+ * Ensures index is built (lazy initialization)
+ */
+function ensureQuestionIndex(): void {
+  if (questionsByCategoryIndex === null) {
+    buildQuestionIndex();
+  }
+}
+
+/**
  * Assessment question bank organized by skill category
  * Each category has questions of varying difficulty to accurately assess user level
  */
@@ -395,10 +424,11 @@ export const assessmentQuestionBank: AssessmentQuestion[] = [
 ];
 
 /**
- * Get questions for a specific category
+ * Get questions for a specific category - O(1) lookup using index
  */
 export function getQuestionsByCategory(category: SkillCategory): AssessmentQuestion[] {
-  return assessmentQuestionBank.filter(q => q.category === category);
+  ensureQuestionIndex();
+  return questionsByCategoryIndex!.get(category) ?? [];
 }
 
 /**

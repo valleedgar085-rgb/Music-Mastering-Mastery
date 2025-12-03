@@ -92,17 +92,40 @@ router.get('/categories/summary', (req: Request, res: Response) => {
   try {
     const summary = Object.values(SkillCategory).map(category => {
       const categoryContent = getContentByCategory(category);
+      
+      // Single-pass counting instead of multiple filter operations
+      let lessons = 0;
+      let miniGames = 0;
+      let quizzes = 0;
+      let beginner = 0;
+      let intermediate = 0;
+      let advanced = 0;
+      let expert = 0;
+      
+      for (const content of categoryContent) {
+        // Count by content type
+        if (content.contentType === ContentType.LESSON) lessons++;
+        else if (content.contentType === ContentType.MINI_GAME) miniGames++;
+        else if (content.contentType === ContentType.QUIZ) quizzes++;
+        
+        // Count by difficulty
+        if (content.difficulty === DifficultyLevel.BEGINNER) beginner++;
+        else if (content.difficulty === DifficultyLevel.INTERMEDIATE) intermediate++;
+        else if (content.difficulty === DifficultyLevel.ADVANCED) advanced++;
+        else if (content.difficulty === DifficultyLevel.EXPERT) expert++;
+      }
+      
       return {
         category,
         totalContent: categoryContent.length,
-        lessons: categoryContent.filter(c => c.contentType === ContentType.LESSON).length,
-        miniGames: categoryContent.filter(c => c.contentType === ContentType.MINI_GAME).length,
-        quizzes: categoryContent.filter(c => c.contentType === ContentType.QUIZ).length,
+        lessons,
+        miniGames,
+        quizzes,
         difficulties: {
-          beginner: categoryContent.filter(c => c.difficulty === DifficultyLevel.BEGINNER).length,
-          intermediate: categoryContent.filter(c => c.difficulty === DifficultyLevel.INTERMEDIATE).length,
-          advanced: categoryContent.filter(c => c.difficulty === DifficultyLevel.ADVANCED).length,
-          expert: categoryContent.filter(c => c.difficulty === DifficultyLevel.EXPERT).length
+          beginner,
+          intermediate,
+          advanced,
+          expert
         }
       };
     });
