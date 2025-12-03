@@ -1,6 +1,69 @@
 import { LearningContent, SkillCategory, ContentType, DifficultyLevel } from '../types';
 
 /**
+ * Index maps for O(1) content lookups - populated lazily on first access
+ */
+let contentByIdIndex: Map<string, LearningContent> | null = null;
+let contentByCategoryIndex: Map<SkillCategory, LearningContent[]> | null = null;
+let contentByTypeIndex: Map<ContentType, LearningContent[]> | null = null;
+let contentByDifficultyIndex: Map<DifficultyLevel, LearningContent[]> | null = null;
+
+/**
+ * Builds index maps from the content library for efficient lookups
+ */
+function buildIndexes(): void {
+  contentByIdIndex = new Map();
+  contentByCategoryIndex = new Map();
+  contentByTypeIndex = new Map();
+  contentByDifficultyIndex = new Map();
+  
+  for (const category of Object.values(SkillCategory)) {
+    contentByCategoryIndex.set(category, []);
+  }
+  
+  for (const type of Object.values(ContentType)) {
+    contentByTypeIndex.set(type, []);
+  }
+  
+  // DifficultyLevel is a numeric enum, so Object.values returns both names and numeric values
+  // We only want the numeric values (1-5)
+  for (const level of Object.values(DifficultyLevel)) {
+    if (typeof level === 'number') {
+      contentByDifficultyIndex.set(level, []);
+    }
+  }
+  
+  for (const content of learningContentLibrary) {
+    contentByIdIndex.set(content.id, content);
+    
+    // Use safe access patterns with fallback to ensure robustness
+    const categoryArr = contentByCategoryIndex.get(content.category);
+    if (categoryArr) {
+      categoryArr.push(content);
+    }
+    
+    const typeArr = contentByTypeIndex.get(content.contentType);
+    if (typeArr) {
+      typeArr.push(content);
+    }
+    
+    const difficultyArr = contentByDifficultyIndex.get(content.difficulty);
+    if (difficultyArr) {
+      difficultyArr.push(content);
+    }
+  }
+}
+
+/**
+ * Ensures indexes are built (lazy initialization)
+ */
+function ensureIndexes(): void {
+  if (contentByIdIndex === null) {
+    buildIndexes();
+  }
+}
+
+/**
  * Learning content library with lessons, mini-games, and quizzes
  * organized by skill category and difficulty level
  */
@@ -543,24 +606,27 @@ export const learningContentLibrary: LearningContent[] = [
 ];
 
 /**
- * Get learning content by category
+ * Get learning content by category - O(1) lookup using index
  */
 export function getContentByCategory(category: SkillCategory): LearningContent[] {
-  return learningContentLibrary.filter(c => c.category === category);
+  ensureIndexes();
+  return contentByCategoryIndex!.get(category) ?? [];
 }
 
 /**
- * Get learning content by difficulty
+ * Get learning content by difficulty - O(1) lookup using index
  */
 export function getContentByDifficulty(difficulty: DifficultyLevel): LearningContent[] {
-  return learningContentLibrary.filter(c => c.difficulty === difficulty);
+  ensureIndexes();
+  return contentByDifficultyIndex!.get(difficulty) ?? [];
 }
 
 /**
- * Get learning content by type
+ * Get learning content by type - O(1) lookup using index
  */
 export function getContentByType(contentType: ContentType): LearningContent[] {
-  return learningContentLibrary.filter(c => c.contentType === contentType);
+  ensureIndexes();
+  return contentByTypeIndex!.get(contentType) ?? [];
 }
 
 /**
@@ -571,14 +637,14 @@ export function getContentForSkillLevel(
   category: SkillCategory,
   maxDifficulty: DifficultyLevel
 ): LearningContent[] {
-  return learningContentLibrary.filter(
-    c => c.category === category && c.difficulty <= maxDifficulty
-  );
+  const categoryContent = getContentByCategory(category);
+  return categoryContent.filter(c => c.difficulty <= maxDifficulty);
 }
 
 /**
- * Get content by ID
+ * Get content by ID - O(1) lookup using index
  */
 export function getContentById(id: string): LearningContent | undefined {
-  return learningContentLibrary.find(c => c.id === id);
+  ensureIndexes();
+  return contentByIdIndex!.get(id);
 }
