@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Mastering Mastery</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">🎵</span>
+      <span class="brand-text">Music Mastering Mastery</span>
+    </div>
+    <div class="nav-links">
+      <a href="#home" class="nav-link active" data-section="home">Home</a>
+      <a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard</a>
+      <a href="#assessment" class="nav-link" data-section="assessment">Assessment</a>
+      <a href="#content" class="nav-link" data-section="content">Content</a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+    
+    <!-- Home Section -->
+    <section id="home" class="section active">
+      <div class="hero">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Master the Art of <span class="gradient-text">Audio Production</span>
+          </h1>
+          <p class="hero-subtitle">
+            Your personalized journey to professional music mastering starts here.
+            Take our skill assessment and get a custom learning plan tailored to your needs.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary btn-lg" onclick="showSection('assessment')">
+              <span>Start Assessment</span>
+              <span class="btn-icon">→</span>
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="showSection('content')">
+              Browse Content
+            </button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="floating-cards">
+            <div class="float-card card-1">
+              <span class="card-icon">🎚️</span>
+              <span>EQ Skills</span>
+            </div>
+            <div class="float-card card-2">
+              <span class="card-icon">📊</span>
+              <span>Compression</span>
+            </div>
+            <div class="float-card card-3">
+              <span class="card-icon">🎼</span>
+              <span>Mix Balance</span>
+            </div>
+            <div class="float-card card-4">
+              <span class="card-icon">🎧</span>
+              <span>Frequency</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon bg-gradient-purple">📝</div>
+          <h3>Skill Assessment</h3>
+          <p>Comprehensive test covering EQ, compression, mixing, and more</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon bg-gradient-blue">🤖</div>
+          <h3>AI Teacher</h3>
+          <p>Personalized learning plans that adapt to your progress</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon bg-gradient-pink">🎮</div>
+          <h3>Interactive Learning</h3>
+          <p>Lessons, mini-games, and quizzes for engaging practice</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon bg-gradient-orange">📈</div>
+          <h3>Track Progress</h3>
+          <p>Visual dashboards showing your skill improvement over time</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+      <div class="section-header">
+        <h2>Your Dashboard</h2>
+        <p>Track your progress and see your skill ratings</p>
+      </div>
+
+      <div class="user-setup" id="user-setup">
+        <div class="setup-card">
+          <h3>Create Your Profile</h3>
+          <p>Enter your details to get started</p>
+          <form id="user-form" class="user-form">
+            <div class="form-group">
+              <label for="display-name">Display Name</label>
+              <input type="text" id="display-name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="your@email.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Profile</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="dashboard-content hidden" id="dashboard-content">
+        <div class="dashboard-grid">
+          <!-- User Info Card -->
+          <div class="dashboard-card user-info-card">
+            <div class="card-header">
+              <h3>Welcome Back</h3>
+            </div>
+            <div class="card-body">
+              <div class="user-avatar">
+                <span id="user-initials">JD</span>
+              </div>
+              <h4 id="user-display-name">John Doe</h4>
+              <p class="text-muted" id="user-email">john@example.com</p>
+              <div class="status-badge" id="assessment-status">
+                <span class="status-dot"></span>
+                <span>Assessment Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill Ratings Card -->
+          <div class="dashboard-card skills-card">
+            <div class="card-header">
+              <h3>Skill Ratings</h3>
+              <span class="card-badge">5 Categories</span>
+            </div>
+            <div class="card-body">
+              <div class="skills-list" id="skills-list">
+                <div class="skill-item">
+                  <div class="skill-info">
+                    <span class="skill-icon">🎚️</span>
+                    <span class="skill-name">Frequency Finder</span>
+                  </div>
+                  <div class="skill-rating">
+                    <div class="rating-bar">
+                      <div class="rating-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-value">--</span>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <div class="skill-info">
+                    <span class="skill-icon">🎛️</span>
+                    <span class="skill-name">EQ Skills</span>
+                  </div>
+                  <div class="skill-rating">
+                    <div class="rating-bar">
+                      <div class="rating-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-value">--</span>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <div class="skill-info">
+                    <span class="skill-icon">⚖️</span>
+                    <span class="skill-name">Mix Balancing</span>
+                  </div>
+                  <div class="skill-rating">
+                    <div class="rating-bar">
+                      <div class="rating-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-value">--</span>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <div class="skill-info">
+                    <span class="skill-icon">📊</span>
+                    <span class="skill-name">Compression</span>
+                  </div>
+                  <div class="skill-rating">
+                    <div class="rating-bar">
+                      <div class="rating-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-value">--</span>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <div class="skill-info">
+                    <span class="skill-icon">🎼</span>
+                    <span class="skill-name">Song Structure</span>
+                  </div>
+                  <div class="skill-rating">
+                    <div class="rating-bar">
+                      <div class="rating-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-value">--</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-block" onclick="showSection('assessment')" id="start-assessment-btn">
+                Take Assessment
+              </button>
+            </div>
+          </div>
+
+          <!-- Learning Plan Card -->
+          <div class="dashboard-card learning-plan-card">
+            <div class="card-header">
+              <h3>Learning Plan</h3>
+              <span class="card-badge" id="plan-progress">0%</span>
+            </div>
+            <div class="card-body">
+              <div class="progress-ring-container">
+                <svg class="progress-ring" viewBox="0 0 100 100">
+                  <circle class="progress-ring-bg" cx="50" cy="50" r="45"/>
+                  <circle class="progress-ring-fill" cx="50" cy="50" r="45" id="progress-ring-fill"/>
+                </svg>
+                <div class="progress-text" id="progress-text">0%</div>
+              </div>
+              <div class="plan-items" id="plan-items">
+                <p class="no-plan-message">Complete the assessment to receive your personalized learning plan.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity Card -->
+          <div class="dashboard-card activity-card">
+            <div class="card-header">
+              <h3>Recent Activity</h3>
+            </div>
+            <div class="card-body">
+              <div class="activity-list" id="activity-list">
+                <p class="no-activity-message">No recent activity yet. Start by taking the assessment!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="section">
+      <div class="section-header">
+        <h2>Skill Assessment</h2>
+        <p>Test your audio mastering knowledge across 5 categories</p>
+      </div>
+
+      <!-- Assessment Intro -->
+      <div class="assessment-intro" id="assessment-intro">
+        <div class="intro-card">
+          <div class="intro-icon">📝</div>
+          <h3>Ready to Test Your Skills?</h3>
+          <p>This comprehensive assessment covers:</p>
+          <div class="category-tags">
+            <span class="tag tag-purple">🎚️ Frequency Finder</span>
+            <span class="tag tag-blue">🎛️ EQ Skills</span>
+            <span class="tag tag-pink">⚖️ Mix Balancing</span>
+            <span class="tag tag-orange">📊 Compression</span>
+            <span class="tag tag-green">🎼 Song Structure</span>
+          </div>
+          <div class="intro-details">
+            <div class="detail-item">
+              <span class="detail-icon">⏱️</span>
+              <span>15-20 minutes</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">❓</span>
+              <span>Multiple question types</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-icon">📊</span>
+              <span>Personalized results</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg" id="begin-assessment-btn" onclick="startAssessment()">
+            Begin Assessment
+          </button>
+        </div>
+      </div>
+
+      <!-- Assessment Questions -->
+      <div class="assessment-questions hidden" id="assessment-questions">
+        <div class="question-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="question-progress-fill"></div>
+          </div>
+          <span class="progress-label" id="question-progress-label">Question 1 of 25</span>
+        </div>
+
+        <div class="question-card" id="question-card">
+          <div class="question-header">
+            <span class="question-category" id="question-category">Category</span>
+            <span class="question-difficulty" id="question-difficulty">Difficulty</span>
+          </div>
+          <div class="question-body">
+            <p class="question-prompt" id="question-prompt">Loading question...</p>
+            <div class="question-options" id="question-options">
+              <!-- Options will be rendered here -->
+            </div>
+          </div>
+          <div class="question-footer">
+            <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+            <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assessment Results -->
+      <div class="assessment-results hidden" id="assessment-results">
+        <div class="results-card">
+          <div class="results-header">
+            <div class="results-icon">🎉</div>
+            <h3>Assessment Complete!</h3>
+            <p class="overall-score">Overall Score: <span id="overall-score">0</span>%</p>
+          </div>
+          <div class="results-body">
+            <h4>Your Skill Ratings</h4>
+            <div class="results-skills" id="results-skills">
+              <!-- Results will be rendered here -->
+            </div>
+            <div class="results-recommendations">
+              <h4>Recommendations</h4>
+              <ul id="recommendations-list">
+                <!-- Recommendations will be rendered here -->
+              </ul>
+            </div>
+          </div>
+          <div class="results-footer">
+            <button class="btn btn-primary btn-lg" onclick="showSection('dashboard')">
+              View Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content Section -->
+    <section id="content" class="section">
+      <div class="section-header">
+        <h2>Learning Content</h2>
+        <p>Explore lessons, mini-games, and quizzes</p>
+      </div>
+
+      <div class="content-filters">
+        <div class="filter-group">
+          <label>Category</label>
+          <select id="category-filter" onchange="filterContent()">
+            <option value="">All Categories</option>
+            <option value="FREQUENCY_FINDER">Frequency Finder</option>
+            <option value="EQ_SKILL">EQ Skills</option>
+            <option value="BALANCING">Mix Balancing</option>
+            <option value="COMPRESSION">Compression</option>
+            <option value="SONG_STRUCTURE">Song Structure</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Type</label>
+          <select id="type-filter" onchange="filterContent()">
+            <option value="">All Types</option>
+            <option value="LESSON">Lessons</option>
+            <option value="MINI_GAME">Mini Games</option>
+            <option value="QUIZ">Quizzes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Difficulty</label>
+          <select id="difficulty-filter" onchange="filterContent()">
+            <option value="">All Levels</option>
+            <option value="1">Beginner</option>
+            <option value="2">Intermediate</option>
+            <option value="3">Advanced</option>
+            <option value="4">Expert</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="content-stats" id="content-stats">
+        <div class="stat-card stat-purple">
+          <span class="stat-value" id="total-content">0</span>
+          <span class="stat-label">Total Content</span>
+        </div>
+        <div class="stat-card stat-blue">
+          <span class="stat-value" id="total-lessons">0</span>
+          <span class="stat-label">Lessons</span>
+        </div>
+        <div class="stat-card stat-pink">
+          <span class="stat-value" id="total-games">0</span>
+          <span class="stat-label">Mini Games</span>
+        </div>
+        <div class="stat-card stat-orange">
+          <span class="stat-value" id="total-quizzes">0</span>
+          <span class="stat-label">Quizzes</span>
+        </div>
+      </div>
+
+      <div class="content-grid" id="content-grid">
+        <!-- Content cards will be rendered here -->
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading content...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Music Mastering Mastery &copy; 2024 | Skill Assessment & Adaptive Learning Platform</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
