@@ -159,7 +159,7 @@ Learning content includes four types (defined in `ContentType` enum):
 2. **Don't forget test files**: All services and models should have corresponding tests
 3. **Maintain type safety**: Avoid `any` types; use proper interfaces
 4. **Keep services decoupled**: Services should be independently testable
-5. **Don't hardcode IDs**: Use uuid for generating unique identifiers
+5. **Don't hardcode IDs**: Use `uuid` package's v4 function for generating unique identifiers
 6. **Remember in-memory storage limitation**: Data is not persisted between restarts
 
 ## Performance Considerations
@@ -171,10 +171,12 @@ Learning content includes four types (defined in `ContentType` enum):
 
 ## Security Notes
 
-- Input validation should be added before production deployment
-- CORS currently allows all origins (development setting)
-- No authentication/authorization implemented yet
-- Consider adding rate limiting for API endpoints
+- **Input validation needed**: Validate email format, string lengths, numeric ranges (e.g., skill ratings 1-5)
+- **Sanitize user input**: Prevent XSS by sanitizing HTML in display names and text fields
+- **CORS**: Currently allows all origins (development setting) - restrict to specific domains in production
+- **Authentication/Authorization**: No auth implemented yet - add before production deployment
+- **Rate limiting**: Consider adding for API endpoints to prevent abuse
+- **SQL Injection**: Not applicable (in-memory storage), but validate if switching to database
 
 ## Dependencies
 
